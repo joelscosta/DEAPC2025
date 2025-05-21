@@ -1,13 +1,23 @@
 body {
-  background-color: green;
-}
+  background-color: white;}
 
 h1 {
-  color: black;
+  color: blue;
   text-align: center;
 }
-
+h1 {
+  font-family: verdana;
+  font-size: 50px;
+}
 p {
   font-family: verdana;
   font-size: 20px;
+}
+
+.banner {
+  width: 100%;
+  height: 300px; /* ajuste conforme necessário */
+  background-image: url('caminho/da/imagem.jpg');
+  background-size: cover;
+  background-position: center;
 }
