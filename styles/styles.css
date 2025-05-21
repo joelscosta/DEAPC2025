@@ -1,5 +1,5 @@
 body {
-  background-color: green;
+  background-color: whitesmoke;
 }
 
 h1 {
@@ -11,3 +11,9 @@ p {
   font-family: verdana;
   font-size: 20px;
 }
+
+@media screen and (max-width: 600px) {
+    .my-image {
+      max-width: 50%;
+    }
+  }
