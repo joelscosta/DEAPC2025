@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Formulário de Reserva</title>
+</head>
+<body>
+
+  <h2>Faça a sua Reserva</h2>
+
+  <form id="bookingForm">
+    <label for="nome">Nome:</label>
+    <input type="text" id="nome" name="nome" required><br><br>
+
+    <label for="email">Email:</label>
+    <input type="email" id="email" name="email" required><br><br>
+
+    <label for="telefone">Telefone:</label>
+    <input type="tel" id="telefone" name="telefone"><br><br>
+
+    <label for="data">Data da Reserva:</label>
+    <input type="date" id="data" name="data" required><br><br>
+
+    <label for="hora">Hora:</label>
+    <input type="time" id="hora" name="hora" required><br><br>
+
+    <label for="servico">Tipo de Serviço:</label>
+    <select id="servico" name="servico">
+      <option value="restaurante">Restaurante</option>
+      <option value="hotel">Hotel</option>
+      <option value="espectaculo">Espectáculo</option>
+      <option value="outro">Outro</option>
+    </select><br><br>
+
+    <label for="detalhes">Detalhes da Reserva:</label>
+    <textarea id="detalhes" name="detalhes"></textarea><br><br>
+
+    <label for="cartao">Número do Cartão de Crédito:</label>
+    <input type="text" id="cartao" name="cartao" pattern="\d{16}" title="16 dígitos" required><br><br>
+
+    <label for="codigo">Código de Segurança:</label>
+    <input type="text" id="codigo" name="codigo" pattern="\d{3,4}" title="3 ou 4 dígitos" required><br><br>
+
+    <button type="submit">Reservar</button>
+  </form>
+  <nav>
+    <li><a href="travels.html">Sair</a></li>
+</nav>
+</body>
+</html>
