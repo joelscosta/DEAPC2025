@@ -1,35 +1,37 @@
-document.addEventListener('DOMContentLoaded', () => {
-  const form = document.getElementById('formLogin');
+document.getElementById('loginForm').addEventListener('submit', function(e){
+  e.preventDefault();
 
-  form.addEventListener('submit', (event) => {
-    event.preventDefault();
+  const user = document.getElementById('username').value.trim();
+  const pass = document.getElementById('password').value.trim();
+  const msg = document.getElementById('message');
 
-    let valido = true;
+  if(user === '' || pass === ''){
+    msg.textContent = 'Por favor, preencha todos os campos.';
+    msg.style.color = 'red';
+    return;
+  }
 
-    // Limpa os estilos de erro anteriores
-    form.querySelectorAll('.erro').forEach(el => el.classList.remove('erro'));
+  // Pega usuários cadastrados do localStorage
+  let users = JSON.parse(localStorage.getItem('users')) || {};
 
-    const username = form.username;
-    const password = form.password;
-
-    if (!username.value.trim()) {
-      username.classList.add('erro');
-      alert('Por favor, preencha o nome de usuário.');
-      username.focus();
-      valido = false;
-      return; // para não mostrar múltiplos alertas ao mesmo tempo
+  if(users[user]){
+    // Usuário existe - tenta login
+    if(users[user] === pass){
+      msg.textContent = 'Login efetuado com sucesso!';
+      msg.style.color = 'green';
+      // Salva usuário logado
+      localStorage.setItem('loggedUser', user);
+      // Redireciona para página reservas
+      setTimeout(() => { window.location.href = 'reservas.html'; }, 1000);
+    } else {
+      msg.textContent = 'Senha incorreta.';
+      msg.style.color = 'red';
     }
-
-    if (!password.value.trim()) {
-      password.classList.add('erro');
-      alert('Por favor, preencha a senha.');
-      password.focus();
-      valido = false;
-      return;
-    }
-
-    if (valido) {
-      form.submit();
-    }
-  });
+  } else {
+    // Registra novo usuário
+    users[user] = pass;
+    localStorage.setItem('users', JSON.stringify(users));
+    msg.textContent = 'Usuário registrado com sucesso! Faça login novamente.';
+    msg.style.color = 'green';
+  }
 });

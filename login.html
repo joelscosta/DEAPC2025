@@ -1,34 +1,25 @@
 <!DOCTYPE html>
-<html>
+<html lang="pt">
 <head>
-<title>Formulário de Login</title>
-<style>
-  .erro {
-    border: 2px solid red;
-    background-color: #ffe6e6;
-  }
-</style>
+<meta charset="UTF-8" />
+<title>Login / Registro</title>
+<link rel="stylesheet" href="styles.css" />
 </head>
 <body>
+  <h2>Login / Registro</h2>
 
-<h2>Formulário de Login</h2>
+  <form id="loginForm">
+    <label for="username">Usuário:</label><br />
+    <input type="text" id="username" name="username" /><br />
 
-<form id="formLogin" action="/login" method="post" novalidate>
-  <label for="username">Nome:</label>
-  <input type="text" id="username" name="username" required><br><br>
+    <label for="password">Senha:</label><br />
+    <input type="password" id="password" name="password" /><br />
 
-  <label for="password">Senha:</label>
-  <input type="password" id="password" name="password" required><br><br>
+    <button type="submit">Entrar / Registrar</button>
+  </form>
 
-  <input type="submit" value="Entrar">
-</form>
+  <p id="message"></p>
 
-<nav>
-    <li><a href="travels.html">Sair</a></li>
-</nav>
-
-<!-- Importa o script após o conteúdo para garantir que o DOM já foi carregado -->
-<script src="scripts/validacaologin.js"></script>
-
+  <script src="login.js"></script>
 </body>
 </html>

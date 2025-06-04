@@ -1,50 +1,25 @@
 <!DOCTYPE html>
-<html>
+<html lang="pt">
 <head>
-  <title>Formulário de Reserva</title>
+<meta charset="UTF-8" />
+<title>Minhas Reservas</title>
+<link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-<script src="scripts/reserva.js"></script>
+  <h2>Minhas Reservas</h2>
+  <button id="logoutBtn">Sair</button>
 
-  <h2>Faça a sua Reserva</h2>
+  <div id="reservasSection">
+    <h3>Reservas Passadas</h3>
+    <ul id="passadas"></ul>
 
-  <form id="bookingForm">
-    <label for="nome">Nome:</label>
-    <input type="text" id="nome" name="nome" required><br><br>
+    <h3>Reservas Presentes</h3>
+    <ul id="presentes"></ul>
 
-    <label for="email">Email:</label>
-    <input type="email" id="email" name="email" required><br><br>
+    <h3>Reservas Futuras</h3>
+    <ul id="futuras"></ul>
+  </div>
 
-    <label for="telefone">Telefone:</label>
-    <input type="tel" id="telefone" name="telefone"><br><br>
-
-    <label for="data">Data da Reserva:</label>
-    <input type="date" id="data" name="data" required><br><br>
-
-    <label for="hora">Hora:</label>
-    <input type="time" id="hora" name="hora" required><br><br>
-
-    <label for="servico">Tipo de Serviço:</label>
-    <select id="servico" name="servico">
-      <option value="restaurante">Restaurante</option>
-      <option value="hotel">Hotel</option>
-      <option value="espectaculo">Espectáculo</option>
-      <option value="outro">Outro</option>
-    </select><br><br>
-
-    <label for="detalhes">Detalhes da Reserva:</label>
-    <textarea id="detalhes" name="detalhes"></textarea><br><br>
-
-    <label for="cartao">Número do Cartão de Crédito:</label>
-    <input type="text" id="cartao" name="cartao" pattern="\d{16}" title="16 dígitos" required><br><br>
-
-    <label for="codigo">Código de Segurança:</label>
-    <input type="text" id="codigo" name="codigo" pattern="\d{3,4}" title="3 ou 4 dígitos" required><br><br>
-
-    <button type="submit">Reservar</button>
-  </form>
-  <nav>
-    <li><a href="travels.html">Sair</a></li>
-</nav>
+  <script src="reservas.js"></script>
 </body>
 </html>
