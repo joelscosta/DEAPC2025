@@ -1,15 +1,104 @@
-<html>
+<!DOCTYPE html>
+<html lang="pt-BR">
 <head>
-<link href="styles/styles.css" rel="stylesheet" />
-<img src="images/ChatGPT Image 21_05_2025, 13_37_16.png" alt="Descrição da imagem">
-<title>Viagens de sonho</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Viagens de Sonho</title>
+    <link href="styles/styles.css" rel="stylesheet" />
 </head>
 <body>
-    <nav>
-        <a href="cliente.html">Área de cliente</a> |
-        <a href="login.html">login</a> |
-        <a href="reserva.html">reserva</a>
-      </nav>
-<h1>Esta e a minha primeira pagina WWW</h1>
-<P>
-<b>Texto de demonstracao esta carregado </b>
+    <div class="container">
+        <nav class="auth-section">
+            <img src="images/ChatGPT Image 21_05_2025, 13_37_16.png" alt="Logo Viagens de Sonho" style="height: 50px; margin-right: auto;">
+            
+            <span id="loggedInUser" style="margin-right: 15px;"></span>
+            <button id="loginRegisterBtn" onclick="toggleAuthForms()">Login / Registar</button>
+            <button id="customerAreaBtn" style="display:none;" onclick="showCustomerArea()">A Minha Área</button>
+            <button id="logoutBtn" style="display:none;" onclick="logoutUser()">Logout</button>
+        </nav>
+
+        <h1>Bem-vindo às Viagens de Sonho!</h1>
+        <p>Explore o mundo connosco e faça a sua reserva.</p>
+
+        <div id="message"></div>
+
+        <div id="authForms">
+            <hr>
+            <h2>Registo de Utilizador</h2>
+            <input type="text" id="regUsername" placeholder="Nome de utilizador"><br>
+            <input type="password" id="regPassword" placeholder="Palavra-passe"><br>
+            <button onclick="registerUser()">Registar</button>
+
+            <hr>
+
+            <h2>Login de Utilizador</h2>
+            <input type="text" id="loginUsername" placeholder="Nome de utilizador"><br>
+            <input type="password" id="loginPassword" placeholder="Palavra-passe"><br>
+            <button onclick="loginUser()">Login</button>
+        </div>
+
+        <hr>
+
+        <h2>Os Nossos Destinos</h2>
+        <div id="destinationsContainer" class="destinations-grid">
+            <p>A carregar destinos...</p>
+        </div>
+
+        <div id="customerArea">
+            <hr>
+            <h2 id="customerAreaTitle"></h2>
+
+            <div class="bookings-section">
+                <h3>O Seu Perfil</h3>
+                <label for="profileFullName">Nome Completo:</label>
+                <input type="text" id="profileFullName" placeholder="Nome Completo">
+                <label for="profileEmail">Email:</label>
+                <input type="email" id="profileEmail" placeholder="Email">
+                <label for="profilePhone">Telefone:</label>
+                <input type="tel" id="profilePhone" placeholder="Telefone">
+                <button onclick="updateProfile()">Atualizar Perfil</button>
+            </div>
+
+            <div id="futureBookingsSection" class="bookings-section">
+                <h3>As Suas Próximas Viagens</h3>
+                <div id="futureBookingsList">
+                    <p>Nenhuma viagem futura encontrada.</p>
+                </div>
+            </div>
+
+            <div id="pastBookingsSection" class="bookings-section">
+                <h3>As Suas Viagens Anteriores</h3>
+                <div id="pastBookingsList">
+                    <p>Nenhuma viagem anterior encontrada.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="bookingModal" class="modal">
+        <div class="modal-content">
+            <span class="close-button" onclick="closeBookingModal()">&times;</span>
+            <h3 id="modalDestinationName">Reservar Viagem para [Destino]</h3>
+
+            <label for="modalTravelDate">Data da Viagem:</label>
+            <input type="date" id="modalTravelDate" required><br>
+
+            <label for="modalNumTravelers">Número de Viajantes:</label>
+            <input type="number" id="modalNumTravelers" value="1" min="1" required><br>
+
+            <h4>Dados do Contacto (Pré-preenchidos do seu perfil)</h4>
+            <label for="modalFullName">Nome Completo:</label>
+            <input type="text" id="modalFullName" placeholder="Nome Completo" disabled>
+            <label for="modalEmail">Email:</label>
+            <input type="email" id="modalEmail" placeholder="Email" disabled>
+            <label for="modalPhone">Telefone:</label>
+            <input type="tel" id="modalPhone" placeholder="Telefone" disabled>
+            <p style="font-size: 0.9em; color: #555;">Estes dados são do seu perfil. Pode atualizá-los na "Sua Área".</p>
+
+            <button id="confirmBookingBtn">Confirmar Reserva</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

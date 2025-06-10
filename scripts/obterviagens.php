@@ -4,9 +4,6 @@ session_start(); // Inicia a sessão para aceder ao user_id
 header('Content-Type: application/json');
 $databaseFile = 'database.sqlite';
 
-header('Access-Control-Allow-Origin: *'); // Mude '*' para o seu domínio em produção
-header('Access-Control-Allow-Methods: GET, OPTIONS');
-header('Access-Control-Allow-Headers: Content-Type, Authorization');
 
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     http_response_code(200);

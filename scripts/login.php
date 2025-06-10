@@ -4,10 +4,6 @@ session_start(); // Inicia a sessão PHP
 header('Content-Type: application/json');
 $databaseFile = 'database.sqlite';
 
-header('Access-Control-Allow-Origin: *'); // Mude '*' para o seu domínio em produção (ex: 'http://seu-site.com')
-header('Access-Control-Allow-Methods: POST, OPTIONS');
-header('Access-Control-Allow-Headers: Content-Type, Authorization'); // Adicionado Authorization para futuro JWT
-
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     http_response_code(200);
     exit();

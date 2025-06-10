@@ -3,11 +3,6 @@
 header('Content-Type: application/json'); // Define o cabeçalho para JSON
 $databaseFile = 'database.sqlite';
 
-// Permite requisições de origens diferentes (CORS) - ajuste para produção
-header('Access-Control-Allow-Origin: *'); // Mude '*' para o seu domínio em produção (ex: 'http://seu-site.com')
-header('Access-Control-Allow-Methods: GET, OPTIONS');
-header('Access-Control-Allow-Headers: Content-Type');
-
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     http_response_code(200);
     exit();
