@@ -26,10 +26,25 @@ p {
   background-size: cover;
   background-position: center;
 }
-=======
+
 @media screen and (max-width: 600px) {
     .my-image {
       max-width: 50%;
     }
   }
 
+body {
+  font-family: Arial, sans-serif;
+  margin: 20px;
+}
+input, select, button {
+  margin: 8px 0;
+  padding: 6px;
+  font-size: 1em;
+}
+button {
+  cursor: pointer;
+}
+p#message, p#msg {
+  font-weight: bold;
+}
