@@ -1,19 +1,62 @@
-$ficheiro = '../dados/utilizadores.txt';
-$valido = false;
+<?php
+session_start(); // Inicia a sessão PHP
 
-if (file_exists($ficheiro)) {
-    $registos = file($ficheiro, FILE_IGNORE_NEW_LINES);
-    foreach ($registos as $linha) {
-        list($user, $pass) = explode(';', $linha);
-        if ($user === $username && $pass === $password) {
-            $valido = true;
-            break;
-        }
+header('Content-Type: application/json');
+$databaseFile = 'database.sqlite';
+
+header('Access-Control-Allow-Origin: *'); // Mude '*' para o seu domínio em produção (ex: 'http://seu-site.com')
+header('Access-Control-Allow-Methods: POST, OPTIONS');
+header('Access-Control-Allow-Headers: Content-Type, Authorization'); // Adicionado Authorization para futuro JWT
+
+if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+    http_response_code(200);
+    exit();
+}
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $input = json_decode(file_get_contents('php://input'), true);
+
+    $username = $input['username'] ?? '';
+    $password = $input['password'] ?? '';
+
+    if (empty($username) || empty($password)) {
+        echo json_encode(['status' => 'error', 'message' => 'Por favor, preencha todos os campos.']);
+        exit;
     }
+
+    try {
+        $db = new PDO('sqlite:' . $databaseFile);
+        $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+        $stmt = $db->prepare("SELECT id, username, password FROM users WHERE username = :username");
+        $stmt->bindParam(':username', $username);
+        $stmt->execute();
+
+        $user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if ($user) {
+            if (password_verify($password, $user['password'])) {
+                $_SESSION['user_id'] = $user['id']; // Guarda o ID do utilizador na sessão
+                $_SESSION['username'] = $user['username']; // Guarda o username na sessão
+
+                echo json_encode([
+                    'status' => 'success',
+                    'message' => "Login bem-sucedido para o utilizador: " . $user['username'],
+                    'user_id' => $user['id'], // Opcional: envia o user_id para o frontend
+                    'username' => $user['username']
+                ]);
+            } else {
+                echo json_encode(['status' => 'error', 'message' => 'Palavra-passe incorreta.']);
+            }
+        } else {
+            echo json_encode(['status' => 'error', 'message' => 'Utilizador não encontrado.']);
+        }
+
+    } catch (PDOException $e) {
+        echo json_encode(['status' => 'error', 'message' => "Erro no servidor: " . $e->getMessage()]);
+    }
+} else {
+    echo json_encode(['status' => 'error', 'message' => 'Método de requisição inválido. Use POST para fazer login.']);
 }
 
-if ($valido) {
-    echo "<p style='color:green;'>Login efetuado com sucesso!</p>";
-} else {
-    echo "<p style='color:red;'>Utilizador ou senha inválidos!</p>";
-}
+?>

@@ -1,30 +1,57 @@
 <?php
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
 
-$username = $_POST['username'] ?? '';
-$password = $_POST['password'] ?? '';
+header('Content-Type: application/json'); // Define o cabeçalho para JSON
+$databaseFile = 'database.sqlite';
 
-if ($username === '' || $password === '') {
-    echo "Todos os campos são obrigatórios.";
-    exit;
+// Permite requisições de origens diferentes (CORS) - ajuste para produção
+header('Access-Control-Allow-Origin: *');
+header('Access-Control-Allow-Methods: POST, OPTIONS');
+header('Access-Control-Allow-Headers: Content-Type');
+
+if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+    // Responde a requisições OPTIONS (preflight CORS)
+    http_response_code(200);
+    exit();
 }
 
-// Criação da base de dados temporária em ficheiro (ou liga à tua base real)
-$ficheiro = '../dados/utilizadores.txt'; // ou usa MySQL mais tarde
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // Obtém o corpo da requisição JSON
+    $input = json_decode(file_get_contents('php://input'), true);
 
-// Verifica se já existe
-$registos = file_exists($ficheiro) ? file($ficheiro, FILE_IGNORE_NEW_LINES) : [];
+    $username = $input['username'] ?? '';
+    $password = $input['password'] ?? '';
 
-foreach ($registos as $linha) {
-    list($user) = explode(';', $linha);
-    if ($user === $username) {
-        echo "Utilizador já existe!";
+    if (empty($username) || empty($password)) {
+        echo json_encode(['status' => 'error', 'message' => 'Por favor, preencha todos os campos.']);
         exit;
     }
+
+    // Hash da senha (IMPORTANTE para segurança!)
+    $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+
+    try {
+        $db = new PDO('sqlite:' . $databaseFile);
+        $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+        $stmt = $db->prepare("INSERT INTO users (username, password) VALUES (:username, :password)");
+        $stmt->bindParam(':username', $username);
+        $stmt->bindParam(':password', $hashedPassword);
+
+        if ($stmt->execute()) {
+            echo json_encode(['status' => 'success', 'message' => "Usuário '$username' registrado com sucesso!"]);
+        } else {
+            echo json_encode(['status' => 'error', 'message' => 'Erro ao registrar usuário.']);
+        }
+
+    } catch (PDOException $e) {
+        if ($e->getCode() == '23000') { // SQLite unique constraint violation
+            echo json_encode(['status' => 'error', 'message' => "Nome de usuário '$username' já existe. Escolha outro."]);
+        } else {
+            echo json_encode(['status' => 'error', 'message' => "Erro: " . $e->getMessage()]);
+        }
+    }
+} else {
+    echo json_encode(['status' => 'error', 'message' => 'Método de requisição inválido. Use POST para registrar.']);
 }
 
-// Guarda os dados (nunca se deve guardar a password em texto plano num projeto real!)
-file_put_contents($ficheiro, "$username;$password\n", FILE_APPEND);
-echo "Conta criada com sucesso. <a href='../login_form.html'>Fazer login</a>";
 ?>
