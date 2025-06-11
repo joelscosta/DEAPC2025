@@ -1,17 +1,6 @@
 <?php
 session_start();
 
-// TEMPORÁRIO PARA DEPURAR:
-error_log("Recebida requisição para obterperfil.php. Método: " . $_SERVER['REQUEST_METHOD']);
-if (isset($_SERVER['CONTENT_TYPE'])) {
-    error_log("Content-Type: " . $_SERVER['CONTENT_TYPE']);
-}
-error_log("Corpo da requisição: " . file_get_contents('php://input'));
-// FIM DO TEMPORÁRIO
-
-header('Content-Type: application/json');
-$databaseFile = 'database.sqlite';
-
 header('Content-Type: application/json');
 $databaseFile = 'database.sqlite';
 
@@ -21,7 +10,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     exit();
 }
 
-if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+if ($_SERVER['REQUEST_METHOD'] === 'GET' || $_SERVER['REQUEST_METHOD'] === 'POST') { // <-- Alterado aqui
     if (!isset($_SESSION['user_id'])) {
         echo json_encode(['status' => 'error', 'message' => 'Acesso negado. Por favor, faça login.']);
         exit;
@@ -49,7 +38,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         echo json_encode(['status' => 'error', 'message' => "Erro no servidor: " . $e->getMessage()]);
     }
 } else {
-    echo json_encode(['status' => 'error', 'message' => 'Método de requisição inválido. Use GET para obter o perfil.']);
+    echo json_encode(['status' => 'error', 'message' => 'Método de requisição inválido para esta operação.']);
 }
 
 ?>

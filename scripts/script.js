@@ -33,7 +33,7 @@ let currentDestinationId = null;
 
 // --- Funções de Autenticação ---
 
-async function registerUser() {
+function registerUser() { // Removido 'async'
     const username = document.getElementById('regUsername').value;
     const password = document.getElementById('regPassword').value;
 
@@ -42,21 +42,22 @@ async function registerUser() {
         return;
     }
 
-    try {
-        const response = await fetch(`${API_BASE_URL}registo.php`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ username, password })
-        });
-        const data = await response.json();
+    fetch(`${API_BASE_URL}registo.php`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, password })
+    })
+    .then(response => response.json())
+    .then(data => {
         showMessage(data.message, data.status);
-    } catch (error) {
+    })
+    .catch(error => {
         console.error('Erro durante o registo:', error);
         showMessage('Ocorreu um erro ao tentar registar. Verifique a console.', 'error');
-    }
+    });
 }
 
-async function loginUser() {
+function loginUser() { // Removido 'async'
     const username = document.getElementById('loginUsername').value;
     const password = document.getElementById('loginPassword').value;
 
@@ -65,42 +66,43 @@ async function loginUser() {
         return;
     }
 
-    try {
-        const response = await fetch(`${API_BASE_URL}login.php`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ username, password })
-        });
-        const data = await response.json();
-
+    fetch(`${API_BASE_URL}login.php`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, password })
+    })
+    .then(response => response.json())
+    .then(data => {
         if (data.status === 'success') {
             showMessage(data.message, data.status);
             currentUserId = data.user_id;
             currentUsername = data.username;
             updateUIForLogin();
-            await loadProfileData();
+            loadProfileData(); // Não há 'await' aqui
             loadBookings();
         } else {
             showMessage(data.message, data.status);
         }
-    } catch (error) {
+    })
+    .catch(error => {
         console.error('Erro durante o login:', error);
         showMessage('Ocorreu um erro ao tentar fazer login. Verifique a console.', 'error');
-    }
+    });
 }
 
-async function logoutUser() {
-    try {
-        const response = await fetch(`${API_BASE_URL}logout.php`);
-        const data = await response.json();
+function logoutUser() { // Removido 'async'
+    fetch(`${API_BASE_URL}logout.php`)
+    .then(response => response.json())
+    .then(data => {
         showMessage(data.message, data.status);
         currentUserId = null;
         currentUsername = null;
         updateUIForLogout();
-    } catch (error) {
+    })
+    .catch(error => {
         console.error('Erro durante o logout:', error);
         showMessage('Ocorreu um erro ao tentar fazer logout. Verifique a console.', 'error');
-    }
+    });
 }
 
 function updateUIForLogin() {
@@ -139,38 +141,35 @@ function showCustomerArea() {
 
 // --- Funções de Perfil ---
 
-// Dentro de script.js
-async function loadProfileData() {
-    try {
-        const response = await fetch(API_BASE_URL + 'obterprefil.php', {
-            method: 'GET', 
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        });
-
-        const data = await response.json();
-
+function loadProfileData() { // Removido 'async'
+    fetch(API_BASE_URL + 'obterprefil.php', {
+        method: 'GET', // Mantido como 'GET'
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
         if (data.status === 'success') {
-            // ... preencher os campos do perfil ...
             profileFullName.value = data.data.full_name || '';
             profileEmail.value = data.data.email || '';
             profilePhone.value = data.data.phone || '';
-            customerAreaTitle.textContent = `Bem-vindo, ${data.data.username}!`; // Atualiza título
+            customerAreaTitle.textContent = `Bem-vindo, ${data.data.username}!`;
         } else {
             showMessage(data.message, 'error');
-            // Se o erro for "Acesso negado", esconda a área do cliente
             if (data.message.includes('Acesso negado')) {
                 updateUIForLogout();
             }
         }
-    } catch (error) {
+    })
+    .catch(error => {
         console.error('Erro ao carregar dados do perfil:', error);
         showMessage('Erro ao carregar dados do perfil.', 'error');
-    }
+    });
 }
 
-async function updateProfile() {
+
+function updateProfile() { // Removido 'async'
     if (!currentUserId) {
         showMessage('Por favor, faça login para atualizar o perfil.', 'error');
         return;
@@ -180,34 +179,34 @@ async function updateProfile() {
     const email = profileEmail.value;
     const phone = profilePhone.value;
 
-    try {
-        const response = await fetch(`${API_BASE_URL}obterprefil.php`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ full_name: fullName, email: email, phone: phone })
-        });
-        const data = await response.json();
+    fetch(`${API_BASE_URL}obterprefil.php`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ full_name: fullName, email: email, phone: phone })
+    })
+    .then(response => response.json())
+    .then(data => {
         showMessage(data.message, data.status);
         if (data.status === 'success') {
             modalFullName.value = fullName;
             modalEmail.value = email;
             modalPhone.value = phone;
         }
-    } catch (error) {
+    })
+    .catch(error => {
         console.error('Erro ao atualizar perfil:', error);
         showMessage('Ocorreu um erro ao atualizar o perfil. Verifique a console.', 'error');
-    }
+    });
 }
 
 // --- Funções de Destinos ---
 
-async function loadDestinations() {
+function loadDestinations() { // Removido 'async'
     destinationsContainer.innerHTML = '<p>A carregar destinos...</p>';
 
-    try {
-        const response = await fetch(`${API_BASE_URL}obterdestinos.php`);
-        const data = await response.json();
-
+    fetch(`${API_BASE_URL}obterdestinos.php`)
+    .then(response => response.json())
+    .then(data => {
         if (data.status === 'success') {
             destinationsContainer.innerHTML = '';
 
@@ -233,11 +232,12 @@ async function loadDestinations() {
             showMessage(`Erro: ${data.message}`, 'error');
             destinationsContainer.innerHTML = `<p>Falha ao carregar destinos: ${data.message}</p>`;
         }
-    } catch (error) {
+    })
+    .catch(error => {
         console.error('Erro ao buscar destinos:', error);
         showMessage('Ocorreu um erro ao carregar destinos. Verifique a console.', 'error');
         destinationsContainer.innerHTML = '<p>Ocorreu um erro ao carregar destinos.</p>';
-    }
+    });
 }
 
 // --- Funções do Modal de Reserva ---
@@ -262,7 +262,7 @@ function closeBookingModal() {
     currentDestinationId = null;
 }
 
-confirmBookingBtn.onclick = async () => {
+confirmBookingBtn.onclick = () => { // Removido 'async'
     const travelDate = modalTravelDate.value;
     const numTravelers = modalNumTravelers.value;
 
@@ -271,39 +271,39 @@ confirmBookingBtn.onclick = async () => {
         return;
     }
 
-    try {
-        const response = await fetch(`${API_BASE_URL}reserva.php`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                destination_id: currentDestinationId,
-                travel_date: travelDate,
-                num_travelers: parseInt(numTravelers)
-            })
-        });
-        const data = await response.json();
+    fetch(`${API_BASE_URL}reserva.php`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            destination_id: currentDestinationId,
+            travel_date: travelDate,
+            num_travelers: parseInt(numTravelers)
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
         showMessage(data.message, data.status);
 
         if (data.status === 'success') {
             closeBookingModal();
             loadBookings();
         }
-    } catch (error) {
+    })
+    .catch(error => {
         console.error('Erro ao criar reserva:', error);
         showMessage('Ocorreu um erro ao criar a reserva. Verifique a console.', 'error');
-    }
+    });
 };
 
 // --- Funções da Área do Cliente (Reservas) ---
 
-async function loadBookings() {
+function loadBookings() { // Removido 'async'
     futureBookingsListDiv.innerHTML = '<p>A carregar as suas próximas viagens...</p>';
     pastBookingsListDiv.innerHTML = '<p>A carregar as suas viagens anteriores...</p>';
 
-    try {
-        const response = await fetch(`${API_BASE_URL}obterviagens.php`);
-        const data = await response.json();
-
+    fetch(`${API_BASE_URL}obterviagens.php`)
+    .then(response => response.json())
+    .then(data => {
         if (data.status === 'success') {
             renderBookings(data.future_bookings, futureBookingsListDiv, 'Nenhuma viagem futura encontrada.');
             renderBookings(data.past_bookings, pastBookingsListDiv, 'Nenhuma viagem anterior encontrada.');
@@ -312,12 +312,13 @@ async function loadBookings() {
             futureBookingsListDiv.innerHTML = `<p>${data.message}</p>`;
             pastBookingsListDiv.innerHTML = `<p>${data.message}</p>`;
         }
-    } catch (error) {
+    })
+    .catch(error => {
         console.error('Erro ao buscar reservas:', error);
         showMessage('Ocorreu um erro ao carregar as suas reservas. Verifique a console.', 'error');
         futureBookingsListDiv.innerHTML = '<p>Ocorreu um erro ao carregar as suas reservas.</p>';
         pastBookingsListDiv.innerHTML = '<p>Ocorreu um erro ao carregar as suas reservas.</p>';
-    }
+    });
 }
 
 function renderBookings(bookings, containerDiv, emptyMessage) {
@@ -352,8 +353,8 @@ function showMessage(msg, type) {
 }
 
 // --- Inicialização ---
-window.onload = async () => {
-    await loadDestinations();
+window.onload = () => { // Removido 'async'
+    loadDestinations(); // Removido 'await'
     modalTravelDate.value = new Date().toISOString().slice(0, 10);
 
     window.onclick = function(event) {
