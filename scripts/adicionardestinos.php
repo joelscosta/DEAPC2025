@@ -29,7 +29,6 @@ try {
     $db = new PDO('sqlite:' . $databaseFile);
     $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-    // Usa INSERT OR IGNORE para evitar duplicatas se o script for executado várias vezes
     $stmt = $db->prepare("INSERT OR IGNORE INTO destinations (name, description, image_url) VALUES (:name, :description, :image_url)");
 
     foreach ($destinations as $destination) {

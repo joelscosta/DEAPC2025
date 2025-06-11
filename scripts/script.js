@@ -33,7 +33,7 @@ let currentDestinationId = null;
 
 // --- Funções de Autenticação ---
 
-function registerUser() { // Removido 'async'
+function registerUser() { 
     const username = document.getElementById('regUsername').value;
     const password = document.getElementById('regPassword').value;
 
@@ -57,7 +57,7 @@ function registerUser() { // Removido 'async'
     });
 }
 
-function loginUser() { // Removido 'async'
+function loginUser() { 
     const username = document.getElementById('loginUsername').value;
     const password = document.getElementById('loginPassword').value;
 
@@ -78,7 +78,7 @@ function loginUser() { // Removido 'async'
             currentUserId = data.user_id;
             currentUsername = data.username;
             updateUIForLogin();
-            loadProfileData(); // Não há 'await' aqui
+            loadProfileData(); 
             loadBookings();
         } else {
             showMessage(data.message, data.status);
@@ -90,7 +90,7 @@ function loginUser() { // Removido 'async'
     });
 }
 
-function logoutUser() { // Removido 'async'
+function logoutUser() { 
     fetch(`${API_BASE_URL}logout.php`)
     .then(response => response.json())
     .then(data => {
@@ -141,9 +141,9 @@ function showCustomerArea() {
 
 // --- Funções de Perfil ---
 
-function loadProfileData() { // Removido 'async'
+function loadProfileData() { 
     fetch(API_BASE_URL + 'obterprefil.php', {
-        method: 'GET', // Mantido como 'GET'
+        method: 'GET', 
         headers: {
             'Content-Type': 'application/json'
         }
@@ -169,7 +169,7 @@ function loadProfileData() { // Removido 'async'
 }
 
 
-function updateProfile() { // Removido 'async'
+function updateProfile() { 
     if (!currentUserId) {
         showMessage('Por favor, faça login para atualizar o perfil.', 'error');
         return;
@@ -201,7 +201,7 @@ function updateProfile() { // Removido 'async'
 
 // --- Funções de Destinos ---
 
-function loadDestinations() { // Removido 'async'
+function loadDestinations() { 
     destinationsContainer.innerHTML = '<p>A carregar destinos...</p>';
 
     fetch(`${API_BASE_URL}obterdestinos.php`)
@@ -262,7 +262,7 @@ function closeBookingModal() {
     currentDestinationId = null;
 }
 
-confirmBookingBtn.onclick = () => { // Removido 'async'
+confirmBookingBtn.onclick = () => { 
     const travelDate = modalTravelDate.value;
     const numTravelers = modalNumTravelers.value;
 
@@ -297,7 +297,7 @@ confirmBookingBtn.onclick = () => { // Removido 'async'
 
 // --- Funções da Área do Cliente (Reservas) ---
 
-function loadBookings() { // Removido 'async'
+function loadBookings() { 
     futureBookingsListDiv.innerHTML = '<p>A carregar as suas próximas viagens...</p>';
     pastBookingsListDiv.innerHTML = '<p>A carregar as suas viagens anteriores...</p>';
 
@@ -353,8 +353,8 @@ function showMessage(msg, type) {
 }
 
 // --- Inicialização ---
-window.onload = () => { // Removido 'async'
-    loadDestinations(); // Removido 'await'
+window.onload = () => { 
+    loadDestinations(); 
     modalTravelDate.value = new Date().toISOString().slice(0, 10);
 
     window.onclick = function(event) {

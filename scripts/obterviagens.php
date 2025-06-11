@@ -24,7 +24,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         $db = new PDO('sqlite:' . $databaseFile);
         $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-        // Junta as tabelas bookings, destinations e users para obter todos os detalhes
         $stmt = $db->prepare("
             SELECT
                 b.id AS booking_id,

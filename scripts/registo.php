@@ -5,7 +5,7 @@ $databaseFile = 'database.sqlite';
 
 
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
-    // Responde a requisições OPTIONS (preflight CORS)
+    // Responde a requisições OPTIONS 
     http_response_code(200);
     exit();
 }
@@ -22,7 +22,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit;
     }
 
-    // Hash da senha (IMPORTANTE para segurança!)
+    // Hash da senha 
     $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
     try {
@@ -40,7 +40,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
     } catch (PDOException $e) {
-        if ($e->getCode() == '23000') { // SQLite unique constraint violation
+        if ($e->getCode() == '23000') { 
             echo json_encode(['status' => 'error', 'message' => "Nome de usuário '$username' já existe. Escolha outro."]);
         } else {
             echo json_encode(['status' => 'error', 'message' => "Erro: " . $e->getMessage()]);

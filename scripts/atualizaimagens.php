@@ -1,9 +1,6 @@
 <?php
 
-$databaseFile = 'database.sqlite'; // Caminho para a sua base de dados
-
-// Esta lista deve corresponder aos nomes dos destinos na base de dados
-// e aos URLs das imagens locais que você quer que eles tenham.
+$databaseFile = 'database.sqlite'; 
 $destinationsToUpdate = [
     [
         'name' => 'Paris',
@@ -26,8 +23,6 @@ $destinationsToUpdate = [
 try {
     $db = new PDO('sqlite:' . $databaseFile);
     $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
-    // Prepara a query UPDATE
     $stmt = $db->prepare("UPDATE destinations SET image_url = :image_url WHERE name = :name");
 
     foreach ($destinationsToUpdate as $destination) {

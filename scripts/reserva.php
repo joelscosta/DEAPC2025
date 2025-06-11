@@ -28,7 +28,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit;
     }
 
-    // Validação básica da data (pode ser mais robusta)
+    // Validação básica da data 
     if (!DateTime::createFromFormat('Y-m-d', $travelDate)) {
         echo json_encode(['status' => 'error', 'message' => 'Formato de data de viagem inválido (AAAA-MM-DD).']);
         exit;
@@ -40,7 +40,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $db = new PDO('sqlite:' . $databaseFile);
         $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-        // Opcional: Verificar se o destination_id existe
+        
         $stmtCheckDest = $db->prepare("SELECT id FROM destinations WHERE id = :destination_id");
         $stmtCheckDest->bindParam(':destination_id', $destinationId, PDO::PARAM_INT);
         $stmtCheckDest->execute();
