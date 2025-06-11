@@ -21,7 +21,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     try {
-        $db = new PDO('sqlite:' . $databaseFile);
+        $db = new PDO(dsn: 'sqlite:' . $databaseFile);
         $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
         $stmt = $db->prepare("SELECT id, username, password FROM users WHERE username = :username");
