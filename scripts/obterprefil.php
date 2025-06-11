@@ -1,6 +1,17 @@
 <?php
 session_start();
 
+// TEMPORÁRIO PARA DEPURAR:
+error_log("Recebida requisição para obterperfil.php. Método: " . $_SERVER['REQUEST_METHOD']);
+if (isset($_SERVER['CONTENT_TYPE'])) {
+    error_log("Content-Type: " . $_SERVER['CONTENT_TYPE']);
+}
+error_log("Corpo da requisição: " . file_get_contents('php://input'));
+// FIM DO TEMPORÁRIO
+
+header('Content-Type: application/json');
+$databaseFile = 'database.sqlite';
+
 header('Content-Type: application/json');
 $databaseFile = 'database.sqlite';
 

@@ -1,6 +1,6 @@
 // script.js
 
-const API_BASE_URL = 'http://localhost/'; 
+const API_BASE_URL = 'http://localhost:8000/scripts/';
 const messageDiv = document.getElementById('message');
 const destinationsContainer = document.getElementById('destinationsContainer');
 const authFormsDiv = document.getElementById('authForms');
@@ -43,7 +43,7 @@ async function registerUser() {
     }
 
     try {
-        const response = await fetch(`${API_BASE_URL}register.php`, {
+        const response = await fetch(`${API_BASE_URL}registo.php`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ username, password })
@@ -139,26 +139,34 @@ function showCustomerArea() {
 
 // --- Funções de Perfil ---
 
+// Dentro de script.js
 async function loadProfileData() {
-    if (!currentUserId) return;
-
     try {
-        const response = await fetch(`${API_BASE_URL}get_profile.php`);
+        const response = await fetch(API_BASE_URL + 'obterprefil.php', {
+            method: 'GET', 
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+
         const data = await response.json();
 
         if (data.status === 'success') {
+            // ... preencher os campos do perfil ...
             profileFullName.value = data.data.full_name || '';
             profileEmail.value = data.data.email || '';
             profilePhone.value = data.data.phone || '';
-            modalFullName.value = data.data.full_name || '';
-            modalEmail.value = data.data.email || '';
-            modalPhone.value = data.data.phone || '';
+            customerAreaTitle.textContent = `Bem-vindo, ${data.data.username}!`; // Atualiza título
         } else {
-            showMessage(`Erro ao carregar perfil: ${data.message}`, 'error');
+            showMessage(data.message, 'error');
+            // Se o erro for "Acesso negado", esconda a área do cliente
+            if (data.message.includes('Acesso negado')) {
+                updateUIForLogout();
+            }
         }
     } catch (error) {
-        console.error('Erro ao buscar dados do perfil:', error);
-        showMessage('Ocorreu um erro ao carregar o perfil. Verifique a console.', 'error');
+        console.error('Erro ao carregar dados do perfil:', error);
+        showMessage('Erro ao carregar dados do perfil.', 'error');
     }
 }
 
@@ -173,7 +181,7 @@ async function updateProfile() {
     const phone = profilePhone.value;
 
     try {
-        const response = await fetch(`${API_BASE_URL}update_profile.php`, {
+        const response = await fetch(`${API_BASE_URL}obterprefil.php`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ full_name: fullName, email: email, phone: phone })
@@ -197,7 +205,7 @@ async function loadDestinations() {
     destinationsContainer.innerHTML = '<p>A carregar destinos...</p>';
 
     try {
-        const response = await fetch(`${API_BASE_URL}get_destinations.php`);
+        const response = await fetch(`${API_BASE_URL}obterdestinos.php`);
         const data = await response.json();
 
         if (data.status === 'success') {
@@ -264,7 +272,7 @@ confirmBookingBtn.onclick = async () => {
     }
 
     try {
-        const response = await fetch(`${API_BASE_URL}create_booking.php`, {
+        const response = await fetch(`${API_BASE_URL}reserva.php`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -293,7 +301,7 @@ async function loadBookings() {
     pastBookingsListDiv.innerHTML = '<p>A carregar as suas viagens anteriores...</p>';
 
     try {
-        const response = await fetch(`${API_BASE_URL}get_bookings.php`);
+        const response = await fetch(`${API_BASE_URL}obterviagens.php`);
         const data = await response.json();
 
         if (data.status === 'success') {
